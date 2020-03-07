@@ -1,20 +1,20 @@
-const express = require('express');
+const express = require("express")
+const socketIO = require("socket.io")
+const http = require("http")
+const path = require("path")
 
-const path = require('path');
+const app = express()
+let server = http.createServer(app) // app corre por atras funcionalidades del servicio http
+const publicPath = path.resolve(__dirname, "../public")
+const port = process.env.PORT || 3000
 
-const app = express();
+app.use(express.static(publicPath))
+//IO=esta la comunicacion del backend
+module.exports.io = socketIO(server)
+require("./sockets/socket")
 
-const publicPath = path.resolve(__dirname, '../public');
-const port = process.env.PORT || 3000;
+server.listen(port, err => {
+  if (err) throw new Error(err)
 
-app.use(express.static(publicPath));
-
-
-
-app.listen(port, (err) => {
-
-    if (err) throw new Error(err);
-
-    console.log(`Servidor corriendo en puerto ${ port }`);
-
-});
+  console.log(`Servidor corriendo en puerto ${port}`)
+})
